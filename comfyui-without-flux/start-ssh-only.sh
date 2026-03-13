@@ -1,8 +1,8 @@
 #!/bin/bash
-
+set -e
 echo "pod started"
 
-if [[ $PUBLIC_KEY ]]
+if [[ -n $PUBLIC_KEY ]]
 then
     mkdir -p ~/.ssh
     chmod 700 ~/.ssh
@@ -19,13 +19,12 @@ fi
 # Move ai-toolkit's folder to $VOLUME so models and all config will persist
 /ai-toolkit-on-workspace.sh
 
-#!/bin/bash
 if [[ -z "${HF_TOKEN}" ]] || [[ "${HF_TOKEN}" == "enter_your_huggingface_token_here" ]]
 then
     echo "HF_TOKEN is not set"
 else
     echo "HF_TOKEN is set, logging in..."
-    hf auth login --token ${HF_TOKEN}
+    hf auth login --token "${HF_TOKEN}"
 fi
 
 # Start AI-Toolkit UI in the background (prebuilt artifacts preferred)
@@ -61,7 +60,7 @@ jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.all
 echo "JupyterLab started"
 
 # Check if the flux model is present
-bash /check_files.sh
+bash /check_files.sh || true
 
 # Check if there is a venv directory, if so, activate it
 if [ -d "/workspace/venv" ]; then
@@ -76,6 +75,4 @@ if [ ! -f /workspace/start_user.sh ]; then
 fi
 
 # Execute the user's script
-bash /workspace/start_user.sh
-
-sleep infinity
+exec bash /workspace/start_user.sh
