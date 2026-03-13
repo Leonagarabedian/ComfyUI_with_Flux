@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 # Ensure we have /workspace in all scenarios
 mkdir -p /workspace
 
@@ -9,6 +9,7 @@ if [[ ! -d /workspace/ComfyUI ]]; then
 	mv /ComfyUI /workspace
 else
 	# otherwise delete the default ComfyUI folder which is always re-created on pod start from the Docker
+	echo "Using existing persistent /workspace/ComfyUI"
 	rm -rf /ComfyUI
 fi
 
