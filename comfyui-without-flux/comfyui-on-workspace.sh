@@ -14,4 +14,4 @@ else
 fi
 
 # Then link /ComfyUI folder to /workspace so it's available in that familiar location as well
-ln -s /workspace/ComfyUI /ComfyUI
+ln -sfn /workspace/ComfyUI /ComfyUI
